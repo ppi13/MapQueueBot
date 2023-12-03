@@ -6,6 +6,7 @@ import pprint
 import requests
 import textwrap
 import webbrowser
+import datetime
 
 from dataclasses import dataclass, field
 from enum import Enum
@@ -25,8 +26,9 @@ class MapQueueConfig:
     viewing_json: str = './data/viewing_map.json'
     queue_json: str = './data/queues.json'
     readable_queue_json: str = './data/queued_names.json'
-
-    map_output_file: str = './output/mapqueue.jpeg'
+    
+    today_date = datetime.date.today().strftime("%Y-%m-%d")  # Format: YYYY-MM-DD
+    map_output_file = f'./output/mapqueue_{today_date}.jpeg'
 
 
     # has no type indicator so it does not show up in the config data
@@ -67,46 +69,47 @@ class MapQueueBot:
     def main_loop(self):
         while(True):
             list_of_inputs = input("Enter prompt (use help):").lower().split()
-            match list_of_inputs[0][0]:
-                case "h":
-                    print(self.config.help_text)
+            command = list_of_inputs[0][0]
+            
+            if command == "h":
+                print(self.config.help_text)
 
-                case "q":
-                    quit()
-                    
-                case "c":
-                    print()
-                    pprint.pprint(self.config, width=200)
-                    print()
-                    
-                case "f":
-                    self.get_git()
+            elif command == "q":
+                quit()
+                
+            elif command == "c":
+                print()
+                pprint.pprint(self.config, width=200)
+                print()
+                
+            elif command == "f":
+                self.get_git()
 
-                case "i":
-                    self.isolate_maps()
+            elif command == "i":
+                self.isolate_maps()
 
-                case "t":
-                    self.print_to_terminal()
+            elif command == "t":
+                self.print_to_terminal()
 
-                case "g":
-                    self.make_graph()
+            elif command == "g":
+                self.make_graph()
 
-                case "r":
-                    self.get_git()
-                    self.isolate_maps()
-                    self.make_graph()
-                    print("Graph created.")
+            elif command == "r":
+                self.get_git()
+                self.isolate_maps()
+                self.make_graph()
+                print("Graph created.")
 
-                case "o":
-                    if(len(list_of_inputs) == 1):
-                        print("Enter a PR number first!")
-                        continue
+            elif command == "o":
+                if(len(list_of_inputs) == 1):
+                    print("Enter a PR number first!")
+                    continue
 
-                    
-                    self.open_pr(int(list_of_inputs[1]))
+                
+                self.open_pr(int(list_of_inputs[1]))
 
-                case "w":
-                    self.queues_to_queuenames()
+            elif command == "w":
+                self.queues_to_queuenames()
 
 
 

@@ -6,10 +6,14 @@ Primarily based around the ParadiseSS13/Paradise repository.
 # How to install
 
 Install a few packages, everything else should work right out of the box.
+
+Requires Python 3.6.8
+
 ```
 pip install networkx
 pip install requests
 pip install matplotlib
+pip install dataclasses
 ```
 
 # How to use
